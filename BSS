@@ -2285,33 +2285,38 @@ function instaConvFunc()
 end
 
 function convertHoney(defaultMask)
+	temptable.convertingHoney = true
 	local hivePos = (player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9)).p
-	while shouldIConvert(true) and vitaly.toggles.convertHoney do
-		if vitaly.toggles.AutoHoneyM then requestAccessoryEquip("Honey Mask") end
-		temptable.convertingHoney = true
-		if api.magnitude(player.SpawnPos.Value.p) > 10 then
-			moveTo(hivePos)
-		end
-		setIdentity(2)
-		local hiveInfo = ActivatablesHives.ButtonText(player)
-		setIdentity(origThreadIdentity)
-		-- print(hiveInfo)
-		if hiveInfo == "Make Honey" then
-			secureCall(ActivatablesHives.ButtonEffect, Activatables, player, plrHive.Platform.Value)
-			-- setIdentity(2)
-			-- ActivatablesHives.ButtonEffect(player, plrHive.Platform.Value)
-			-- setIdentity(7)
-			task.wait(3)
-		elseif hiveInfo == "To Make Honey, Collect Pollen From Flower Fields." then
-			break
-			
-		end
-		task.wait(1)
+	moveTo(hivePos)
+	if vitaly.toggles.AutoHoneyM == true then
+		local args = {
+			[1] = "Equip",
+			[2] = {
+				["Category"] = "Accessory",
+				["Type"] = "Honey Mask"
+			}
+		}
+		
+		game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("ItemPackageEvent"):InvokeServer(unpack(args))
 	end
-	task.wait(5)
+	repeat wait(.01)
+		if game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" then
+			game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
+		end
+	until game.Players.LocalPlayer.CoreStats.Pollen.Value == 0
+	repeat wait() until game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey"
+	wait(3)
 	temptable.convertingHoney = false
-	if defaultMask == nil or defaultMask == true then
-		if vitaly.toggles.AutoHoneyM then requestAccessoryEquip(vitaly.vars.defaultmask) end
+	if vitaly.toggles.AutoHoneyM == true then
+		local args = {
+			[1] = "Equip",
+			[2] = {
+				["Category"] = "Accessory",
+				["Type"] = vitaly.vars.defaultmask
+			}
+		}
+		
+		game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("ItemPackageEvent"):InvokeServer(unpack(args))
 	end
 	temptable.lastConvertAtHive = tick()
 end
@@ -2610,12 +2615,9 @@ function killVicious()
 			if v.Name:find("Vicious") then
 				for i2, v2 in pairs(Workspace.Monsters:GetChildren()) do 
 					if v2.Name:find("Vicious") and v2:FindFirstChild("HumanoidRootPart") then
-						local level = tonumber(string.gmatch(v2.Name, "%d+")())
-						if level and level >= vitaly.combatSettings.viciousMinLevel and level <= vitaly.combatSettings.viciousMaxLevel then
 							viciousModel = v2
 							moveTo(v.Position)
 							task.wait(0.5)
-						end
 					end
 				end
 			end
@@ -2624,7 +2626,7 @@ function killVicious()
 			local viciousOnField = findField(viciousModel.HumanoidRootPart.Position)
 			-- warn(viciousOnField)
 			local level = tonumber(string.gmatch(viciousModel.Name, "%d+")())
-			while viciousModel and viciousOnField and viciousModel.Parent and vitaly.combatSettings.killVicious and temptable.detected.vicious and level and level >= vitaly.combatSettings.viciousMinLevel and level <= vitaly.combatSettings.viciousMaxLevel do
+			while viciousModel and viciousOnField and viciousModel.Parent and vitaly.combatSettings.killVicious and temptable.detected.vicious do
 				if not viciousModel.Parent then viciousModel = nil break end
 				if viciousOnField then
 					-- warn(findField(api.humanoidrootpart().Position))
