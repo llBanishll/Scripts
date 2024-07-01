@@ -2303,9 +2303,11 @@ function convertHoney(defaultMask)
 		if game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" then
 			game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
 		end
-	until game.Players.LocalPlayer.CoreStats.Pollen.Value == 0
-	repeat wait() until game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey"
-	wait(3)
+		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-hivePos).magnitude > 4 then
+			moveTo(hivePos)
+		end
+	until game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey"
+	wait(3.5)
 	temptable.convertingHoney = false
 	if vitaly.toggles.AutoHoneyM == true then
 		local args = {
