@@ -506,7 +506,7 @@ getgenv().vitaly = {
 		BrownBearPriority = 1,
 		PandaBearPriority = 1,
 		ScienceBearPriority = 1,
-		PolarBearPriority = 1,
+		PolarBearPriority = 6,
 		SpiritBearPriority = 1,
 		BuckoBeePriority = 1,
 		RileyBeePriority = 1,
@@ -5297,43 +5297,13 @@ end)()
 
 local miscellaneousTab = Tabs.Misc
 
-miscellaneousTab:AddButton({
-	Title = "Hide all textures",
-	Description = "Reduce stress on CPU",
-	Callback = function()
-		Window:Dialog({
-			Title = "Hide all textures?",
-			Content = "This action cannot be reversed.",
-			Buttons = {
-				{
-					Title = "Confirm",
-					Callback = function()
-						print("Confirmed hiding textures")
-
-						if not temptable.gpuSaverActivated then
-							temptable.gpuSaverActivated = true
-							hide(game.Workspace)
-						end
-
-						Fluent:Notify({
-							Title = "Textures hidden!",
-							Content = "All textures have been hidden to reduce stress on CPU.",
-							Duration = 3
-						})
-					end
-				},
-				{
-					Title = "Cancel",
-					Callback = function()
-						print("Cancelled hiding textures")
-					end
-				}
-			}
-		})
+miscellaneousTab:AddToggle("True/False", {
+	Title = "enable Rendering",
+	Default = true,
+	Callback = function(state)
+		game:GetService("RunService"):Set3dRenderingEnabled(state)
 	end
 })
-
-local settingsTab = Tabs.Settings
 
 -- AutoFarm settings Section
 settingsTab:AddSlider("convertat", {
@@ -6244,7 +6214,7 @@ if scriptType == LPH_STRENC("Paid") then
 										if rareTexture and decal and v ~= nil and rareTexture == decal.Texture then
 											local oldPos = api.humanoidrootpart().CFrame
 											for i = 1, 5 do
-												api.humanoidrootpart().CFrame = v.CFrame
+												moveTo(v.Position)
 												task.wait()
 											end
 											api.humanoidrootpart().CFrame = oldPos
@@ -6267,12 +6237,15 @@ if scriptType == LPH_STRENC("Paid") then
 		Callback = function(v)
 			getgenv().vitaly.toggles.autoFireFly = v
 			if v then
+				count = 0
 				spawn(function()
 					while getgenv().vitaly.toggles.autoFireFly do
 						local nearestFirefly = GetNearestFirefly()
 						if nearestFirefly then
 							temptable.stopEverything = true
+							count = count + 1
 							moveTo(nearestFirefly.Position)
+
 						else
 							temptable.stopEverything = false
 						end
