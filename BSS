@@ -5305,6 +5305,8 @@ miscellaneousTab:AddToggle("True/False", {
 	end
 })
 
+local settingsTab = Tabs.Settings
+
 -- AutoFarm settings Section
 settingsTab:AddSlider("convertat", {
 	Title = "Convert Honey At",
