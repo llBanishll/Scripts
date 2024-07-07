@@ -2775,7 +2775,7 @@ function farmShowerAndCoco()
 			local key, warningisk = next(temptable.showersTable)
 			if warningisk and warningisk.Parent and warningisk.Transparency > 0.09 then
 				startTween(warningisk.Position, 350)
-				-- tween(0.05, warningisk.Position, true)
+				tween(0.05, warningisk.Position, true)
 				repeat task.wait()
 				until not warningisk.Parent or warningisk.Transparency <= 0.08
 				temptable.showersTable[key] = nil
@@ -2790,7 +2790,7 @@ function farmShowerAndCoco()
 			local key, warningisk = next(temptable.coconutsTable)
 			if warningisk and warningisk.Parent and warningisk.Transparency > 0.09 then
 				startTween(warningisk.Position, 350)
-				-- tween(150, warningisk.Position)
+				tween(.150, warningisk.Position)
 				repeat task.wait()
 				until not warningisk.Parent or warningisk.Transparency <= 0.08
 				temptable.coconutsTable[key] = nil
@@ -6219,7 +6219,6 @@ if scriptType == LPH_STRENC("Paid") then
 												moveTo(v.Position)
 												task.wait()
 											end
-											api.humanoidrootpart().CFrame = oldPos
 										end
 									end
 								end
