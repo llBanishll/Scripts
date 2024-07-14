@@ -2285,8 +2285,11 @@ function instaConvFunc()
 end
 
 function convertHoney(defaultMask)
+	local StartConv = tick()
 	temptable.convertingHoney = true
 	local hivePos = (player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9)).p
+	hivePos2 = player.SpawnPos.Value
+	moveTo(hivePos2)
 	moveTo(hivePos)
 	if vitaly.toggles.AutoHoneyM == true then
 		local args = {
@@ -2300,13 +2303,16 @@ function convertHoney(defaultMask)
 		game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("ItemPackageEvent"):InvokeServer(unpack(args))
 	end
 	repeat wait(.01)
+		if StartConv > 30 and game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" then
+			moveTo(hivePos2)
+		end
 		if game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" then
 			game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
 		end
 		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-hivePos).magnitude > 4 then
 			moveTo(hivePos)
 		end
-	until game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey"
+	until game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and getBagPercentage() == 0
 	wait(3.5)
 	temptable.convertingHoney = false
 	if vitaly.toggles.AutoHoneyM == true then
