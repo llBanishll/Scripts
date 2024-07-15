@@ -821,8 +821,8 @@ function tween(pos, speed, caveAvoid)
 	alignOrientation.CFrame = humanoidRootPart.CFrame
 	alignOrientation.Parent = humanoidRootPart
 
-	-- humanoid:ChangeState(Enum.HumanoidStateType.Landed)
-	-- task.wait()
+	humanoid:ChangeState(Enum.HumanoidStateType.Landed)
+	task.wait()
 	humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 
 	getgenv().TweenNoclip = RunService.PostSimulation:Connect(function()
@@ -2290,7 +2290,7 @@ function convertHoney(defaultMask)
 	local hivePos = (player.SpawnPos.Value * CFrame.fromEulerAnglesXYZ(0, 110, 0) + Vector3.new(0, 0, 9)).p
 	hivePos2 = player.SpawnPos.Value
 	moveTo(hivePos2)
-	moveTo(hivePos)
+	moveTo(hivePos2)
 	if vitaly.toggles.AutoHoneyM == true then
 		local args = {
 			[1] = "Equip",
@@ -2309,8 +2309,8 @@ function convertHoney(defaultMask)
 		if game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" then
 			game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
 		end
-		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-hivePos).magnitude > 4 then
-			moveTo(hivePos)
+		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-hivePos2).magnitude > 3 then
+			moveTo(hivePos2)
 		end
 	until game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" and getBagPercentage() == 0
 	wait(3.5)
