@@ -2301,8 +2301,6 @@ function convertHoney(defaultMask)
 	end
 	repeat wait(.01)
 		if game.Players.LocalPlayer.PlayerGui.ScreenGui.ActivateButton.TextBox.Text ~= "Stop Making Honey" then
-			game.Players.LocalPlayer.Character.Humanoid.Jump = true
-			wait()
 			game:GetService("ReplicatedStorage").Events.PlayerHiveCommand:FireServer("ToggleHoneyMaking")
 		end
 		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position-hivePos).magnitude > 2 then
