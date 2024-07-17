@@ -3098,6 +3098,8 @@ end
 function tryKillMonsters()
 	if vitaly.combatSettings.killSpidor then
 		handleMonsterKill("Spider")
+		handleMonsterKill("Beetle")
+		handleMonsterKill("Ladybug")
 	end
 	if vitaly.combatSettings.killMantis then
 		handleMonsterKill("Mantis")
